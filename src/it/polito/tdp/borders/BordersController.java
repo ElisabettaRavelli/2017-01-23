@@ -6,6 +6,9 @@ package it.polito.tdp.borders;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import it.polito.tdp.borders.model.Model;
+import it.polito.tdp.borders.model.Stato;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -13,6 +16,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 public class BordersController {
+	
+	private Model model;
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -31,6 +36,16 @@ public class BordersController {
 
     @FXML
     void doCalcolaConfini(ActionEvent event) {
+    	Integer anno = Integer.parseInt(txtAnno.getText());
+    	if(anno<1816 || anno>2006) {
+    		txtResult.appendText("Inserire un anno tra il 1816 e il 2006\n");
+    	}
+    	this.model.creaGrafo(anno);
+    	txtResult.appendText("Grafo creato con "+ this.model.getVertici()+ " vertici e "+ this.model.getArchi()+ " archi\n");
+    	
+    	for(Stato s: this.model.getStati()) {
+    		txtResult.appendText(s.toString()+ "\n");
+    	}
 
     }
 
@@ -45,5 +60,9 @@ public class BordersController {
         assert boxNazione != null : "fx:id=\"boxNazione\" was not injected: check your FXML file 'Borders.fxml'.";
         assert txtResult != null : "fx:id=\"txtResult\" was not injected: check your FXML file 'Borders.fxml'.";
 
+    }
+    
+    public void setModel(Model model) {
+    	this.model = model;
     }
 }
